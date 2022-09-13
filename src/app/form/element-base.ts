@@ -4,6 +4,8 @@ import {Observable} from 'rxjs';
 
 import {ValueAccessorBase} from './value-accessor';
 
+import { map } from 'rxjs/operators';
+
 import {
   AsyncValidatorArray,
   ValidatorArray,
@@ -11,6 +13,7 @@ import {
   message,
   validate,
 } from './validate';
+import { Injector } from '@angular/core';
 
 export abstract class ElementBase<T> extends ValueAccessorBase<T> {
   protected abstract model: NgModel;
@@ -18,8 +21,9 @@ export abstract class ElementBase<T> extends ValueAccessorBase<T> {
   constructor(
     private validators: ValidatorArray,
     private asyncValidators: AsyncValidatorArray,
+    private injector: Injector
   ) {
-    super();
+    super(injector);
   }
 
   protected validate(): Observable<ValidationResult> {
@@ -29,10 +33,10 @@ export abstract class ElementBase<T> extends ValueAccessorBase<T> {
   }
 
   protected get invalid(): Observable<boolean> {
-    return this.validate().map(v => Object.keys(v || {}).length > 0);
+    return this.validate().pipe(map(v => Object.keys(v || {}).length > 0));
   }
 
   protected get failures(): Observable<Array<string>> {
-    return this.validate().map(v => Object.keys(v).map(k => message(v, k)));
+    return this.validate().pipe(map(v => Object.keys(v).map(k => message(v, k))));
   }
 }

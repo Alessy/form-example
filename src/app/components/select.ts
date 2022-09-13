@@ -4,6 +4,7 @@ import {
   Inject,
   Input,
   ViewChild,
+  Injector,
 } from '@angular/core';
 
 import {
@@ -52,8 +53,9 @@ export class FormSelectComponent extends ElementBase<string> {
   constructor(
     @Optional() @Inject(NG_VALIDATORS) validators: Array<any>,
     @Optional() @Inject(NG_ASYNC_VALIDATORS) asyncValidators: Array<any>,
+    injector: Injector
   ) {
-    super(validators, asyncValidators);
+    super(validators, asyncValidators, injector);
   }
 }
 

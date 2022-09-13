@@ -4,6 +4,7 @@ import {
   Inject,
   Input,
   ViewChild,
+  Injector,
 } from '@angular/core';
 
 import {
@@ -28,7 +29,6 @@ import {ElementBase, animations} from '../form';
         [id]="identifier"
       />
       <validation
-        [@flyInOut]="'in,out'"
         *ngIf="invalid | async"
         [messages]="failures | async">
       </validation>
@@ -52,8 +52,9 @@ export class FormTextComponent extends ElementBase<string> {
   constructor(
     @Optional() @Inject(NG_VALIDATORS) validators: Array<any>,
     @Optional() @Inject(NG_ASYNC_VALIDATORS) asyncValidators: Array<any>,
+    injector: Injector
   ) {
-    super(validators, asyncValidators);
+    super(validators, asyncValidators, injector);
   }
 }
 
