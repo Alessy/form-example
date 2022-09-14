@@ -14,7 +14,7 @@ import {
   NG_ASYNC_VALIDATORS,
 } from '@angular/forms';
 
-import {ElementBase, animations} from '../form';
+import { ElementBase, animations } from '../form';
 
 @Component({
   selector: 'form-text',
@@ -25,27 +25,34 @@ import {ElementBase, animations} from '../form';
         type="text"
         [placeholder]="placeholder"
         [(ngModel)]="value"
-        [ngClass]="{invalid: (invalid | async)}"
+        [ngClass]="{invalid: (invalid | async) }"
         [id]="identifier"
       />
       <validation
+        [@flyInOut]="'in,out'"
         *ngIf="invalid | async"
         [messages]="failures | async">
       </validation>
     </div>
   `,
   animations,
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: FormTextComponent,
-    multi: true,
-  }],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: FormTextComponent,
+      multi: true,
+    },
+  ],
+  host: {
+    '[class.to-je-test]': 'invalid'
+  }
 })
 export class FormTextComponent extends ElementBase<string> {
   @Input() public label: string;
   @Input() public placeholder: string;
 
-  @ViewChild(NgModel) model: NgModel;
+  // @ViewChild(NgModel) model: NgModel;
+  @ViewChild(NgModel, { static: true }) model: NgModel;
 
   public identifier = `form-text-${identifier++}`;
 

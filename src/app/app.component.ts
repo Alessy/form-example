@@ -1,4 +1,5 @@
-import {Component, ViewEncapsulation} from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,14 @@ export class AppComponent {
 
   public dropdownValue: string = '';
 
-  onSubmit(value) {
+  onSubmit(value, form: NgForm) {
     alert(`Submit: ${JSON.stringify(value)}`);
+    if (form.invalid) {
+      console.log('invalid');
+      return;
+    }
+
+    form.resetForm();
+    form.reset();
   }
 }

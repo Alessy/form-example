@@ -5,7 +5,7 @@
   <span style="font-family: monospace">34d7f03</span>
 </h4>
 
-<form #form="ngForm" (ngSubmit)="onSubmit(form.value)">
+<form #form="ngForm" (ngSubmit)="onSubmit(form.value, form)">
   <form-text
     required
     hexadecimal
@@ -16,7 +16,7 @@
   >
   </form-text>
 
-  <!-- <form-select
+  <form-select
     required
     name="dropdownValue"
     label="Value 2"
@@ -27,7 +27,7 @@
     <option [value]="2">Option Two</option>
     <option [value]="3">Option Three</option>
     <option [value]="4">Option Four</option>
-  </form-select> -->
+  </form-select>
 
   <button type="Submit" [disabled]="!form.valid">Submit</button>
 </form>

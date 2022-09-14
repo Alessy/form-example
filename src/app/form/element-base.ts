@@ -1,19 +1,10 @@
-import {NgModel} from '@angular/forms';
-
-import {Observable} from 'rxjs';
-
-import {ValueAccessorBase} from './value-accessor';
-
+import { Injector } from '@angular/core';
+import { NgModel } from '@angular/forms';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import {
-  AsyncValidatorArray,
-  ValidatorArray,
-  ValidationResult,
-  message,
-  validate,
-} from './validate';
-import { Injector } from '@angular/core';
+import { AsyncValidatorArray, message, validate, ValidationResult, ValidatorArray } from './validate';
+import { ValueAccessorBase } from './value-accessor';
 
 export abstract class ElementBase<T> extends ValueAccessorBase<T> {
   protected abstract model: NgModel;
@@ -26,17 +17,37 @@ export abstract class ElementBase<T> extends ValueAccessorBase<T> {
     super(injector);
   }
 
-  protected validate(): Observable<ValidationResult> {
-    return validate
-      (this.validators, this.asyncValidators)
-      (this.model.control);
+  protected validateInnerModel(): Observable<ValidationResult> {
+    if (this.model && this.model.control) {
+      return validate(this.validators, this.asyncValidators)(this.model.control);
+    } else {
+      return of(null);
+    }
   }
 
-  protected get invalid(): Observable<boolean> {
-    return this.validate().pipe(map(v => Object.keys(v || {}).length > 0));
+  public get invalid(): Observable<boolean> {
+    return combineLatest([this.validateInnerModel(), this.getErrorsFromOuterModel()]).pipe(
+      map(v => {
+        let errors = Object.assign(v[0] || {}, v[1] || {});
+        return Object.keys(errors || {}).length > 0;
+      })
+    )
   }
 
-  protected get failures(): Observable<Array<string>> {
-    return this.validate().pipe(map(v => Object.keys(v).map(k => message(v, k))));
+  public get failures(): Observable<Array<string>> {
+    return combineLatest([this.validateInnerModel(), this.getErrorsFromOuterModel()]).pipe(
+      map(v => {
+        let errors = Object.assign(v[0] || {}, v[1] || {});
+        return Object.keys(errors || {}).map(k => message(errors, k));
+      })
+    )
+  }
+
+  private getErrorsFromOuterModel(): Observable<ValidationResult> {
+    if (this.control == null || this.control.errors == null) {
+      return of(null);
+    }
+
+    return of(this.control.errors);
   }
 }
