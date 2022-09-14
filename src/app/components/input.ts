@@ -5,6 +5,7 @@ import {
   Input,
   ViewChild,
   Injector,
+  HostBinding,
 } from '@angular/core';
 
 import {
@@ -29,7 +30,7 @@ import { ElementBase, animations } from '../form';
           [(ngModel)]="value"
           [ngClass]="{invalid: (invalid | async) }"
           [id]="identifier"
-          
+          required
         />
         <mat-hint *ngIf="(invalid | async)">
           <validation
@@ -53,6 +54,9 @@ export class FormTextComponent extends ElementBase<string> {
   @Input() public label: string;
   @Input() public placeholder: string;
 
+  @HostBinding('attr.aria-required')
+  @Input()
+  public required: boolean;
   // @ViewChild(NgModel) model: NgModel;
   @ViewChild(NgModel, { static: true }) model: NgModel;
 
