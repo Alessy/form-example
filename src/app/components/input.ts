@@ -21,18 +21,23 @@ import { ElementBase, animations } from '../form';
   template: `
     <div>
       <label *ngIf="label" [attr.for]="identifier">{{label}}</label>
-      <input
-        type="text"
-        [placeholder]="placeholder"
-        [(ngModel)]="value"
-        [ngClass]="{invalid: (invalid | async) }"
-        [id]="identifier"
-      />
-      <validation
-        [@flyInOut]="'in,out'"
-        *ngIf="invalid | async"
-        [messages]="failures | async">
-      </validation>
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          [placeholder]="placeholder"
+          [(ngModel)]="value"
+          [ngClass]="{invalid: (invalid | async) }"
+          [id]="identifier"
+          
+        />
+        <mat-hint *ngIf="(invalid | async)">
+          <validation
+            [@flyInOut]="'in,out'"
+            [messages]="failures | async">
+          </validation>
+        </mat-hint>
+      </mat-form-field>
     </div>
   `,
   animations,
@@ -43,9 +48,6 @@ import { ElementBase, animations } from '../form';
       multi: true,
     },
   ],
-  host: {
-    '[class.to-je-test]': 'invalid'
-  }
 })
 export class FormTextComponent extends ElementBase<string> {
   @Input() public label: string;

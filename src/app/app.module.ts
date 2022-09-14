@@ -11,6 +11,9 @@ import * as components from './components';
 import { FormTextComponent, ValidationComponent } from './components';
 import { FormSelectComponent } from './components/select';
 import { HexadecimalValueValidator } from './validators';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 const allComponents = Object.keys(components).map((k) => components[k]);
 
@@ -28,6 +31,9 @@ const allComponents = Object.keys(components).map((k) => components[k]);
     BrowserAnimationsModule,
     FormsModule,
     HttpModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule
   ],
   exports: [FormTextComponent, FormSelectComponent, ValidationComponent],
   providers: [],

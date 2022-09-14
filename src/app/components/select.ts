@@ -14,33 +14,42 @@ import {
   NG_ASYNC_VALIDATORS,
 } from '@angular/forms';
 
-import {ElementBase, animations} from '../form';
+import { ElementBase, animations } from '../form';
 
 @Component({
   selector: 'form-select',
   template: `
     <div>
       <label *ngIf="label" [attr.for]="identifier">{{label}}</label>
-      <select
-          [(ngModel)]="value"
-          [ngClass]="{invalid: (invalid | async)}"
-          [id]="identifier">
-        <option value="" disabled selected *ngIf="placeholder">{{placeholder}}</option>
-        <ng-content></ng-content>
-      </select>
-      <validation
-        [@flyInOut]="'in,out'"
-        *ngIf="invalid | async"
-        [messages]="failures | async">
-      </validation>
+      <mat-form-field>
+        <mat-select
+            required
+            [(ngModel)]="value"
+            [ngClass]="{invalid: (invalid | async)}"
+            [id]="identifier">
+          <mat-option value="null">{{placeholder}}</mat-option>
+          <mat-option [value]="1">Option One</mat-option>
+          <mat-option [value]="2">Option Two</mat-option>
+          <mat-option [value]="3">Option Three</mat-option>
+          <mat-option [value]="4">Option Four</mat-option>
+          <ng-content></ng-content>
+        </mat-select>
+        <mat-hint *ngIf="(invalid | async)">
+          <validation
+            [messages]="failures | async">
+          </validation>
+        </mat-hint>
+      </mat-form-field>
     </div>
   `,
   animations,
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: FormSelectComponent,
-    multi: true,
-  }],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: FormSelectComponent,
+      multi: true,
+    },
+  ],
 })
 export class FormSelectComponent extends ElementBase<string> {
   @Input() public label: string;

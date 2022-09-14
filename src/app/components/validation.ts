@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'validation',
@@ -7,12 +7,12 @@ import {Component, Input} from '@angular/core';
       <div *ngFor="let message of messages">{{message}}</div>
     </div>
   `,
-  styles: [`
+  styles: [
+    `
     .validation {
-      color: #999;
-      margin: 12px;
-    }`
-  ]
+      color: red;
+    }`,
+  ],
 })
 export class ValidationComponent {
   @Input() messages: Array<string>;

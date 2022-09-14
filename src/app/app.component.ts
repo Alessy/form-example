@@ -12,8 +12,7 @@ export class AppComponent {
 
   public dropdownValue: string = '';
 
-  onSubmit(value, form: NgForm) {
-    alert(`Submit: ${JSON.stringify(value)}`);
+  onSubmit(form: NgForm) {
     if (form.invalid) {
       console.log('invalid');
       return;
